@@ -26,7 +26,9 @@ public class TriangleAI : MonoBehaviour
     public float HP;
     public float MaxHP = 100;
     public float damage = 20;
+    public float XpWorth;
     // Start is called before the first frame update
+
     void Start()
     {
         aStar = GameObject.Find("A*").GetComponent<AstarPath>();
@@ -118,5 +120,10 @@ public class TriangleAI : MonoBehaviour
             HP -= damage;
             Debug.Log(HP);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GlobalControl.gainXP(XpWorth);
     }
 }

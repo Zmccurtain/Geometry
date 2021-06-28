@@ -10,6 +10,8 @@ public class Room : MonoBehaviour
     public Room previous;
     public bool isSpawnRoom = false;
     public bool aggro = false;
+    public bool bossRoom = false;
+    private bool NotSpawned = true;
     void Start()
     {
         Floor.roomList.Add(gameObject);
@@ -56,6 +58,12 @@ public class Room : MonoBehaviour
         else if (collision.transform.tag.Equals("Player"))
         {
             aggro = true;
+            if (bossRoom && NotSpawned)
+            {
+                Instantiate(Resources.Load("Next") as GameObject, transform);
+                NotSpawned = false;
+            }
+            
             GlobalControl.SetLayerRecursively(gameObject, 11);
         }
     }

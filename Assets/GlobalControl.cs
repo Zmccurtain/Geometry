@@ -11,6 +11,8 @@ public class GlobalControl : MonoBehaviour
     public float bulletDamage = 20;
     public float MaxHP = 100;
     public float HP = 100;
+    public float xp = 0;
+    public float xpPerLevel = 100;
 
     void Awake()
     {
@@ -34,6 +36,11 @@ public class GlobalControl : MonoBehaviour
                 trans.GetChild(0).gameObject.layer = layerNumber;
             }
         }
+    }
+
+    public static void gainXP(float amount)
+    {
+        PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>().addXP(amount);
     }
 }
 

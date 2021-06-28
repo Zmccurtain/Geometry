@@ -7,9 +7,9 @@ public class Floor : MonoBehaviour
 {
     public static List<GameObject> roomList = new List<GameObject>();
     public static List<Door> unopenedDoors = new List<Door>();
-    public static float spawnTime = .05f;
+    public static float spawnTime = .5f;
     public static float spawnTimer = 0;
-    public static int maxRooms = 10;
+    public static int maxRooms = 20;
     private GameObject wallFound;
     private Door bossDoor;
 

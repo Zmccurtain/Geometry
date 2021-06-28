@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Stats")]
     public float MaxHP;
     public float HP;
+    public float xpPerLevel;
+    public float xpToNext;
+    public float xp;
     [Header("Movement")]
     public float speed;
     public float timeToMax;
@@ -39,6 +43,10 @@ public class PlayerController : MonoBehaviour
         bulletCD = GlobalControl.Instance.bulletCD;
         bulletDamage = GlobalControl.Instance.bulletDamage;
         bulletSpeed = GlobalControl.Instance.bulletSpeed;
+        xp = GlobalControl.;
+        xpPerLevel = GlobalControl.;
+        xpToNext = xpPerLevel - xp;
+
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -106,6 +114,8 @@ public class PlayerController : MonoBehaviour
         GlobalControl.Instance.bulletCD = bulletCD;
         GlobalControl.Instance.bulletDamage = bulletDamage;
         GlobalControl.Instance.bulletSpeed = bulletSpeed;
+        GlobalControl.Instance.xp = xp;
+        GlobalControl.Instance.xpPerLevel = xpPerLevel;
     }
 
     void Dashing()
@@ -156,4 +166,17 @@ public class PlayerController : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Collided");
+        if (collision.transform.tag.Equals("Finish"))
+        {
+            Debug.Log("Finish");
+            EditorApplication.isPlaying = false;
+        }
+    }
+
+    public void addXp(float amount)
+    {
+        
     }
