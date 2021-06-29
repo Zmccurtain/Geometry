@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float xpPerLevel;
     public float xpToNext;
     public float xp;
+    public int Level;
     [Header("Movement")]
     public float speed;
     public float timeToMax;
@@ -35,18 +36,23 @@ public class PlayerController : MonoBehaviour
     private float dashCDTimer=0;
     private Vector2 dir = new Vector2(0, 0);
     // Start is called before the first frame update
+    private void Awake()
+    {
+        GlobalControl.player = this;
+    }
     void Start()
     {
+        
         MaxHP = GlobalControl.Instance.MaxHP;
         HP = GlobalControl.Instance.HP;
         speed = GlobalControl.Instance.speed;
         bulletCD = GlobalControl.Instance.bulletCD;
         bulletDamage = GlobalControl.Instance.bulletDamage;
         bulletSpeed = GlobalControl.Instance.bulletSpeed;
-        xp = GlobalControl.;
-        xpPerLevel = GlobalControl.;
+        xp = GlobalControl.Instance.xp;
+        xpPerLevel = GlobalControl.Instance.xpPerLevel;
+        Level = GlobalControl.Instance.Level;
         xpToNext = xpPerLevel - xp;
-
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -116,6 +122,7 @@ public class PlayerController : MonoBehaviour
         GlobalControl.Instance.bulletSpeed = bulletSpeed;
         GlobalControl.Instance.xp = xp;
         GlobalControl.Instance.xpPerLevel = xpPerLevel;
+        GlobalControl.Instance.Level = Level;
     }
 
     void Dashing()
@@ -164,19 +171,36 @@ public class PlayerController : MonoBehaviour
 
     void Death()
     {
+        EditorApplication.isPlaying = false;
         Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collided");
         if (collision.transform.tag.Equals("Finish"))
         {
-            Debug.Log("Finish");
+            savePlayer();
             EditorApplication.isPlaying = false;
         }
     }
 
-    public void addXp(float amount)
+    public void AddXp(float amount)
     {
-        
+        xp += amount;
+        if (xp >= xpPerLevel)
+        {
+            xp -= xpPerLevel;
+            Level++;
+            OnLevel();
+        }
+        xpToNext = xpPerLevel - xp;
     }
+
+    private void OnLevel()
+    {
+        bulletDamage += 10;
+        bulletCD = Mathf.MoveTowards(bulletCD, .05f, 1 / 50);
+        MaxHP += 10;
+        HP = MaxHP;
+        xpPerLevel *= 1.1f;
+    }
+}
